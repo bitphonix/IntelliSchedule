@@ -27,7 +27,7 @@ class CalendarService:
         self.credentials = None
         self.service = None
         self.flow = None
-        self.redirect_uri = "http://localhost:8000/auth/callback"
+        self.redirect_uri = os.getenv("GOOGLE_REDIRECT_URI", "https://intellischedule-backend.onrender.com/auth/callback")
         self.credentials_path = credentials_path
         self.token_path = token_path
         

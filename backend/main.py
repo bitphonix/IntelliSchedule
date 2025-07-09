@@ -130,8 +130,9 @@ async def auth_callback(code: str, session_id: str = "default"):
         agent.calendar_service = calendar_service
         
         # Redirect back to frontend with session info
+        frontend_url = os.getenv("FRONTEND_URL", "https://intellischedule-bzuqu73t8jaz8ywvk5rzh2.streamlit.app/")
         return RedirectResponse(
-            url=f"http://localhost:8501?session_id={session_id}&auth=success",
+            url=f"{frontend_url}?session_id={session_id}&auth=success",
             status_code=302
         )
     except Exception as e:
