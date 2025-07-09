@@ -59,14 +59,23 @@ class CalendarService:
     def get_auth_url(self) -> str:
         """Get Google OAuth authorization URL"""
         try:
-            if not os.path.exists(self.credentials_path):
-                raise FileNotFoundError(f"credentials.json not found at {self.credentials_path}.")
-            
-            self.flow = Flow.from_client_secrets_file(
-                self.credentials_path,
-                scopes=self.SCOPES,
-                redirect_uri=self.redirect_uri
-            )
+            # Deployment-friendly: Load credentials from environment variable or file
+            creds_json_str = os.getenv('GOOGLE_CREDENTIALS_JSON')
+            if creds_json_str:
+                client_config = json.loads(creds_json_str)
+                self.flow = Flow.from_client_config(
+                    client_config,
+                    scopes=self.SCOPES,
+                    redirect_uri=self.redirect_uri
+                )
+            elif os.path.exists(self.credentials_path):
+                self.flow = Flow.from_client_secrets_file(
+                    self.credentials_path,
+                    scopes=self.SCOPES,
+                    redirect_uri=self.redirect_uri
+                )
+            else:
+                raise FileNotFoundError("credentials.json not found and GOOGLE_CREDENTIALS_JSON environment variable not set.")
             
             auth_url, _ = self.flow.authorization_url(
                 access_type='offline',
