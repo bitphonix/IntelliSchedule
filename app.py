@@ -15,7 +15,7 @@ st.set_page_config(
 )
 
 # Constants
-BACKEND_URL = "http://localhost:8000"
+BACKEND_URL = "https://intellischedule-backend.onrender.com"
 DEFAULT_TIMEZONE = "UTC"
 
 # Custom CSS
